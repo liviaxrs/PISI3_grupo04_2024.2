@@ -1,49 +1,32 @@
 import streamlit as st
-import json
 import requests
+from nbconvert import HTMLExporter
+import nbformat
 
-# Função para carregar o notebook diretamente do GitHub
-def load_notebook_from_github(repo_url, notebook_name):
-    # A URL para obter a versão bruta do notebook no GitHub
-    notebook_url = f"{repo_url}/{notebook_name}"
-    
-    try:
-        response = requests.get(notebook_url)
-        response.raise_for_status()  # Levanta um erro em caso de falha
-        
-        # Carregar o conteúdo JSON diretamente como um dicionário
-        notebook_content = json.loads(response.text)
-        
-        return notebook_content
-    except requests.exceptions.RequestException as e:
-        st.error(f"Erro ao carregar o notebook: {e}")
+st.set_page_config(layout="wide")  # Modo de tela larga
+
+# URL do notebook no GitHub
+url = "https://raw.githubusercontent.com/maltezzzz/PISI3_grupo04_2024.2/main/notebook/Clusterização_Maltez.ipynb"
+
+# Função para carregar o notebook e converter para HTML
+def load_notebook_as_html(url):
+    response = requests.get(url)
+    if response.status_code == 200:
+        notebook_content = nbformat.reads(response.text, as_version=4)
+        html_exporter = HTMLExporter()
+        html_data, _ = html_exporter.from_notebook_node(notebook_content)
+        return html_data
+    else:
         return None
 
-# Função para exibir células de código e markdown no Streamlit
-def display_notebook(notebook_content):
-    if notebook_content is None:
-        st.error("Não foi possível carregar o notebook.")
-        return
-    for cell in notebook_content['cells']:
-        if cell['cell_type'] == 'code':
-            st.subheader("Código")
-            st.code(''.join(cell['source']), language='python')
-            if 'outputs' in cell:
-                for output in cell['outputs']:
-                    if 'text/plain' in output['data']:
-                        st.write(output['data']['text/plain'])
-                    elif 'image/png' in output['data']:
-                        st.image(output['data']['image/png'])
-                    elif 'text/html' in output['data']:
-                        st.markdown(output['data']['text/html'], unsafe_allow_html=True)
-        elif cell['cell_type'] == 'markdown':
-            st.subheader("Comentário")
-            st.markdown(cell['source'])
+# Streamlit App
+st.title("Visualização do Notebook")
+st.write("Clusterização_Maltez.ipynb")
 
-# URL do repositório GitHub
-repo_url = 'https://raw.githubusercontent.com/maltezzzz/PISI3_grupo04_2024.2'
-notebook_name = 'main/notebook/Clusterização_Maltez.ipynb'  # Caminho correto para o notebook no repositório
+# Carregar notebook
+html_notebook = load_notebook_as_html(url)
 
-# Carregar e exibir o notebook
-notebook_content = load_notebook_from_github(repo_url, notebook_name)
-display_notebook(notebook_content)
+if html_notebook:
+    st.components.v1.html(html_notebook, height=1200, scrolling=True)  # Aumenta altura
+else:
+    st.error("Erro ao carregar o notebook. Verifique o link.")
