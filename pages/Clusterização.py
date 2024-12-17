@@ -38,7 +38,7 @@ def display_notebook(notebook_content):
             st.markdown(cell.source)
 
 # URL do repositório GitHub
-repo_url = 'https://github.com/heldjow/PISI3_grupo04_2024.2/raw/main/notebook/Clusterização_Maltez.ipynb' # Substitua pelo seu repositório GitHub
+repo_url = 'https://github.com/maltezzzz/PISI3_grupo04_2024.2/raw/main/notebook/Clusterização_Maltez.ipynb' # Substitua pelo seu repositório GitHub
 notebook_name = 'Clusterização_Maltez.ipynb'  # Substitua pelo nome do seu notebook no repositório
 
 # Carregar e exibir o notebook
