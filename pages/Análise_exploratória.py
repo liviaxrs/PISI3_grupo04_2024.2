@@ -50,6 +50,9 @@ for variavel in variaveis_selecionadas:
     dados_plot = dados_plot.value_counts().reset_index()
     dados_plot.columns = [variavel, 'Contagem']
 
+         # Ordena os dados pela contagem (do maior para o menor)
+    dados_plot = dados_plot.sort_values(by='Contagem', ascending=True)
+
     # Se for "Qualificação da mãe" ou "Qualificação do pai", barras horizontais
     if variavel in ["Qualificação da mãe", "Qualificação do pai"]:
         fig = px.bar(dados_plot, 
@@ -101,6 +104,9 @@ for variavel in variaveis_selecionadas:
     
     # Agrupar por variável e Target para contar as ocorrências
     dados_plot = dados_plot.groupby([variavel, 'Target']).size().reset_index(name='Contagem')
+
+     # Ordena os dados pela contagem (do maior para o menor)
+    dados_plot = dados_plot.sort_values(by='Contagem', ascending=True)
 
     # Se for "Qualificação da mãe" ou "Qualificação do pai", barras horizontais
     if variavel in ["Qualificação da mãe", "Qualificação do pai"]:
