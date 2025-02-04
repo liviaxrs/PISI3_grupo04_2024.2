@@ -6,7 +6,7 @@ import nbformat
 st.set_page_config(layout="wide")  # Modo de tela larga
 
 # URL do notebook no GitHub
-url = "https://raw.githubusercontent.com/maltezzzz/PISI3_grupo04_2024.2/main/notebook/Clusterização_Maltez.ipynb"
+url = "https://raw.githubusercontent.com/LucasGCRamos/PISI3_grupo04_2024.2/refs/heads/main/notebook/Clusteriza%C3%A7%C3%A3o_Lucas.ipynb"
 
 # Função para carregar o notebook e converter para HTML
 def load_notebook_as_html(url):
