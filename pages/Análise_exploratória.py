@@ -2,13 +2,20 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+st.set_page_config(page_title="Análise Exploratória", page_icon="🎓",layout="wide")
+st.title("📊 Análise Exploratória dos Dados")
+st.markdown(
+    "Esta análise apresenta uma visão geral dos dados acadêmicos, explorando fatores como situação financeira, familiar e demográfica."
+)
+
 dados = pd.read_parquet('pisi3_database/dataset_traduzido.parquet')
 
+
 # Mostrar o dataset
-st.write("### Visualização do Dataset")
+st.subheader("📌 Visão Geral do Dataset")
 st.dataframe(dados.head())
-st.write(f"**Número de Linhas:** {dados.shape[0]}")
-st.write(f"**Número de Colunas:** {dados.shape[1]}")
+st.write(f"- **Número de Linhas:** {dados.shape[0]}")
+st.write(f"- **Número de Colunas:** {dados.shape[1]}")
 
 # Agrupar variáveis em categorias
 grupos_variaveis = {
@@ -36,7 +43,7 @@ def aplicar_filtro_necessidade_educacao(dados_plot):
     return dados_plot
 
 # Gráficos de Barra
-st.write("### Gráficos de Barra - Visualização Padrão")
+st.subheader("📊 Distribuição das Variáveis")
 # Exibe gráficos de barra para todas as variáveis do grupo selecionado
 for variavel in variaveis_selecionadas:
     dados_plot = dados[variavel].copy()
@@ -92,7 +99,7 @@ for variavel in variaveis_selecionadas:
         st.write("**Insight**: A grande maioria das pessoas não tem necessidade de educação especial, enquanto apenas um número muito pequeno possui essa necessidade. Isso indica que a necessidade de educação especial é uma condição relativamente rara dentro deste grupo.")
 
 # Gráficos de comparação com "Target"
-st.write("### Comparação com a variável 'Target' - Visualização Padrão")
+st.subheader("📈 Comparação com a Variável de Interesse")
 for variavel in variaveis_selecionadas:
     dados_plot = dados[[variavel, "Target"]].copy()
     
