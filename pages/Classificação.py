@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pickle
-import shap
-
-import matplotlib.pyplot as plt
 
 st.set_page_config(page_title="Previsão de Evasão Universitária", page_icon="🎓", layout="centered")
 st.markdown("<h1 style='text-align: center; '>🎓 Previsão de Evasão Universitária</h1>", unsafe_allow_html=True)
@@ -98,11 +95,3 @@ if st.button("🔍 Fazer Previsão", use_container_width=True):
     result = "🚀 O aluno tem tendência a continuar na universidade!" if prediction[0] == 0 else "⚠️ O aluno pode estar em risco de evasão."
     st.markdown(f"<h3 style='text-align: center; '>{result}</h3>", unsafe_allow_html=True)
 
-# grafico SHAP
-explainer = shap.Explainer(model)
-shap_values = explainer(input_data)
-
-st.write("### Gráfico de Força SHAP")
-shap.initjs()
-shap_html = shap.plots.force(explainer.expected_value, shap_values.values, input_data.iloc[0, :])
-st.components.v1.html(shap_html, height=300)
