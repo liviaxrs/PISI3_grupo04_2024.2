@@ -158,26 +158,24 @@ with tab3:
         # Descrição dos clusters
         st.subheader("Descrição dos Clusters")
         cluster_descriptions = {
-            0: """🧑‍🎓 Jovens abastados 
+            0: """🧑‍🎓 Jovens com origem de alta escolaridade 
 
         - Caracteristicas:
         - Pais com maior grau de ensino  
-        - Não devedor  
-        - Mensalidades em dia  
+        - Não devedor    
         - Não bolsista  
         - Jovens entre 18-27 anos  
         - Solteiros  
         """,
-            1: """🧑‍🏫 Experientes com pouco dinheiro
+            1: """🧑‍🏫 Experientes com origem educacional mais simples
         
         - Caracteristicas:
         - Pais com menor grau de ensino  
-        - Menor quantidade de não devedores  
-        - Menos mensalidades em dia  
+        - Baixa quantidade de não devedores    
         - A partir dos 28 anos  
-        - Casados ou solteiros  
+        - Variedade no estado civil  
         """,
-            2: """🎓 Bolsistas meio termo 
+            2: """🎓 Bolsistas 
 
         - Caracteristicas:
         - Pais que completaram ensino médio ou fundamental  

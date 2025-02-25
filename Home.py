@@ -30,15 +30,15 @@ st.header("🔍 Perguntas que orientam a análise")
 st.subheader("🎯 Pergunta 1")
 st.markdown(
     """
-    **De que forma fatores socioeconômicos, como a ocupação dos pais, a regularidade do pagamento das mensalidades, 
-    a condição de endividamento e a concessão de bolsa de estudos, podem ser utilizados para prever a probabilidade de evasão de alunos universitários?**
+    **De que forma fatores como o nível de escolaridade dos pais, a regularidade do pagamento das mensalidades, a condição de endividamento 
+    e a concessão de bolsa de estudos, podem ser utilizados para prever a probabilidade de evasão de alunos universitários?**
     """
 )
 
 st.subheader("📌 Pergunta 2")
 st.markdown(
     """
-    **Ao agrupar alunos com base em características acadêmicas, socioeconômicas e de adaptação, quais padrões emergem na formação de grupos 
-    e como esses padrões podem ser utilizados para categorizar alunos em diferentes níveis de risco acadêmico?**
+    **Ao agrupar alunos com base em características socioeconômicas, como dados demográficos, educação familiar e condição financeira, 
+    quais características emergem na formação de grupos e como essas características podem ser utilizadas para traçar perfis de risco de evasão?**
     """
 )
