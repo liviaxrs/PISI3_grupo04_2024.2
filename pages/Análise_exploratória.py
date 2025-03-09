@@ -2,28 +2,130 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-st.set_page_config(page_title="Análise Exploratória", page_icon="🎓",layout="wide")
+# Configuração da página
+st.set_page_config(page_title="Análise Exploratória", page_icon="🎓", layout="wide")
 st.title("📊 Análise Exploratória dos Dados")
 st.markdown(
     "Esta análise apresenta uma visão geral dos dados acadêmicos, explorando fatores como situação financeira, familiar e demográfica."
 )
 
+# Carregar os dados
 dados = pd.read_parquet('pisi3_database/dataset_traduzido.parquet')
-
 
 # Mostrar o dataset
 st.subheader("📌 Visão Geral do Dataset")
-st.dataframe(dados.head())
 st.write(f"- **Número de Linhas:** {dados.shape[0]}")
 st.write(f"- **Número de Colunas:** {dados.shape[1]}")
 
-# Agrupar variáveis em categorias
+# Definir grupos de variáveis
 grupos_variaveis = {
     "Financeiro": ["Devedor", "Pagamento em dia", "Bolsista"],
     "Família": ["Qualificação da mãe", "Qualificação do pai"],
-    "Demografia": ["Gênero", "Estado civil"],
+    "Demografia": ["Gênero", "Estado civil", "Idade na inscrição"],
     "Outros": ["Deslocado", "Necessidade de educação especial"]
 }
+
+# Filtros no corpo da página
+st.header("🔍 Filtros para gráfico interativo")
+
+# Função para criar filtros
+def criar_filtro(coluna, dados):
+    opcoes = ["Todos"] + list(dados[coluna].unique())
+    return st.selectbox(coluna, opcoes)
+
+# Criar expanders para cada grupo de variáveis
+with st.expander("**Dados demograficos**", expanded=True):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        genero = criar_filtro("Gênero", dados)
+    with col2:
+        estado_civil = criar_filtro("Estado civil", dados)
+    with col3:
+        idade_min, idade_max = st.slider(
+            "Idade na inscrição",
+            min_value=int(dados["Idade na inscrição"].min()),
+            max_value=int(dados["Idade na inscrição"].max()),
+            value=(int(dados["Idade na inscrição"].min()), int(dados["Idade na inscrição"].max()))
+        )
+
+with st.expander("**Dados financeiros**", expanded=False):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        devedor = criar_filtro("Devedor", dados)
+    with col2:
+        pagamento_em_dia = criar_filtro("Pagamento em dia", dados)
+    with col3:
+        bolsista = criar_filtro("Bolsista", dados)
+
+with st.expander("**Dados familiares**", expanded=False):
+    col1, col2 = st.columns(2)
+    with col1:
+        qualificacao_mae = criar_filtro("Qualificação da mãe", dados)
+    with col2:
+        qualificacao_pai = criar_filtro("Qualificação do pai", dados)
+
+with st.expander("**Outros**", expanded=False):
+    col1, col2 = st.columns(2)
+    with col1:
+        deslocado = criar_filtro("Deslocado", dados)
+    with col2:
+        necessidade_educacao_especial = criar_filtro("Necessidade de educação especial", dados)
+
+# Aplicar filtros ao dataset
+dados_filtrados = dados.copy()
+
+# Filtros de Demografia
+if genero != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Gênero"] == genero]
+if estado_civil != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Estado civil"] == estado_civil]
+dados_filtrados = dados_filtrados[
+    (dados_filtrados["Idade na inscrição"] >= idade_min) &
+    (dados_filtrados["Idade na inscrição"] <= idade_max)
+]
+
+# Filtros de Financeiro
+if devedor != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Devedor"] == devedor]
+if pagamento_em_dia != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Pagamento em dia"] == pagamento_em_dia]
+if bolsista != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Bolsista"] == bolsista]
+
+# Filtros de Família
+if qualificacao_mae != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Qualificação da mãe"] == qualificacao_mae]
+if qualificacao_pai != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Qualificação do pai"] == qualificacao_pai]
+
+# Filtros de Outros
+if deslocado != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Deslocado"] == deslocado]
+if necessidade_educacao_especial != "Todos":
+    dados_filtrados = dados_filtrados[dados_filtrados["Necessidade de educação especial"] == necessidade_educacao_especial]
+
+# Agrupar por Target e contar os registros
+contagem_target = dados_filtrados["Target"].value_counts().reset_index()
+contagem_target.columns = ["Target", "Contagem"]
+
+# Gráfico principal
+st.subheader("📈 Gráfico interativo com distribuição de formação acadêmica")
+
+# Exemplo de gráfico: Barras por Target
+fig = px.bar(
+    contagem_target,
+    x="Target",
+    y="Contagem",
+    title=f"Distribuição de formação acadêmica com filtros aplicados",
+    labels={"Contagem": "Quantidade de estudantes", "Target": "Status acadêmico"},
+    text="Contagem"  # Mostra o valor da contagem em cima da barra
+)
+
+# Exibir o gráfico
+st.plotly_chart(fig)
+
+
+st.subheader("Gráficos de acordo com caracteristicas selecionadas")
 
 # Seleção do grupo de variáveis
 grupo_selecionado = st.selectbox("Escolha o grupo de variáveis para análise:", list(grupos_variaveis.keys()))
