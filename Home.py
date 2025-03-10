@@ -12,7 +12,7 @@ st.set_page_config(
 
 
 # Título principal
-st.markdown("<h1 style='text-align: center; '>📚 ProAluno - Análise da Evasão Universitária</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; '>📚 Análise de Evasão Universitária</h1>", unsafe_allow_html=True)
 
 st.divider()
 
